@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <% include /templates/head %>
+</head>
+
+<body>
+  <div id="wrapper">
+  <% include /templates/header %>
+    <!-- Page Content -->
+      <div id="page-wrapper">
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1 class="page-header">Cadastro de Funcionario</h1>
+                  </div>
+                  <!-- /.col-lg-12 -->
+              </div>
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="panel panel-default">
+                          <div class="panel-heading">
+                                Edição de Funcionarios
+                          </div>
+                          <div class="panel-body">
+                            <% if(validacao.length > 0){ %>
+                                <div class="panel-body">
+                                <% for(var i = 0; i < validacao.length; i++) {%>
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <a href="#" class="alert-link">Ops!</a>.<%= validacao[i].msg %>
+                                    </div>
+                                <% } %>
+                                </div>
+                            <% } %>
+                            <form role="form" action="/salvarFuncionarios" method="post">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel-body">
+                                            <!-- Nav tabs -->
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#home" data-toggle="tab">Básico</a>
+                                                </li>
+                                                <li><a href="#profile" data-toggle="tab">Endereço</a>
+                                                </li>
+                                            </ul>
+                                            <!-- Tab panes -->
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade in active" id="home">
+                                                    <div class="form-group">
+                                                        <label>Registro</label>
+                                                        <input class="form-control disabled" readonly="true" name="_id" id="_id" placeholder="Registro da empresa no banco de dados" value="<%= ( funcionarios.length == 1 ? funcionarios[0].idFUNCIONARIO : "" ) %>">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Cpf</label>
+                                                        <input class="form-control" name="cpf" id="cpf" placeholder="Informe o cpf do funcionário"  onkeypress="return SomenteNumero();" autocomplete="off" MaxLength="18" OnChange="AplicarMascaraCpfCnpj(this);"  value="<%= ( funcionarios.length == 1 ? funcionarios[0].CPF : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Nome</label>
+                                                        <input class="form-control" name="nome" id="nome" placeholder="Informe o nome do funcionário" value="<%= ( funcionarios.length == 1 ? funcionarios[0].NOME : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Fone</label>
+                                                        <input class="form-control" name="fone" id="fone" MaxLength="30" onkeyup="formataTelefone(this,event);" autocomplete="off" placeholder="Informe o telefone do funcionário" value="<%= ( funcionarios.length == 1 ? funcionarios[0].FONE : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>E-mail</label>
+                                                        <input class="form-control" name="email" id="email" MaxLength="160" autocomplete="off" placeholder="Informe o email do funcionário" value="<%= ( funcionarios.length == 1 ? funcionarios[0].EMAIL : "" ) %>">
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="profile">
+                                                    <div class="form-group">
+                                                        <label>Cep</label>
+                                                        <input class="form-control" name="cep" id="cep" placeholder="Informe o cep do funcionario" MaxLength="9" onkeyup="formataCEP(this,event);" autocomplete="off" value="<%= ( funcionarios.length == 1 ? funcionarios[0].CEP : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Endereço</label>
+                                                        <input class="form-control" name="endereco" id="endereco" placeholder="Informe o endereço do funcionário" value="<%= ( funcionarios.length == 1 ? funcionarios[0].ENDERECO : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Número</label>
+                                                        <input class="form-control" name="numero" id="numero" placeholder="Informe o número do funcionário" value="<%= ( funcionarios.length == 1 ? funcionarios[0].NUMERO : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Complemento</label>
+                                                        <input class="form-control" name="complemento" id="complemento" placeholder="complemento do funcionario" value="<%= ( funcionarios.length == 1 ? funcionarios[0].COMPLEMENTO : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group" >
+                                                        <label>Uf</label>
+                                                        <select class="form-control" name="uf">
+                                                            <option value="">Selecione</option>
+                                                            <option value="AC" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "AC" ? "selected" : "" ) %>>AC</option>
+                                                            <option value="AL" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "AL" ? "selected" : "" ) %>>AL</option>
+                                                            <option value="AP" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "AP" ? "selected" : "" ) %>>AP</option>
+                                                            <option value="AM" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "AM" ? "selected" : "" ) %>>AM</option>
+                                                            <option value="BA" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "BA" ? "selected" : "" ) %>>BA</option>
+                                                            <option value="CE" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "CE" ? "selected" : "" ) %>>CE</option>
+                                                            <option value="DF" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "DF" ? "selected" : "" ) %>>DF</option>
+                                                            <option value="GO" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "GO" ? "selected" : "" ) %>>GO</option>
+                                                            <option value="MA" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "MA" ? "selected" : "" ) %>>MA</option>
+                                                            <option value="MT" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "MT" ? "selected" : "" ) %>>MT</option>
+                                                            <option value="MS" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "MS" ? "selected" : "" ) %>>MS</option>
+                                                            <option value="MG" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "MG" ? "selected" : "" ) %>>MG</option>
+                                                            <option value="PA" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "PA" ? "selected" : "" ) %>>PA</option>
+                                                            <option value="PB" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "PB" ? "selected" : "" ) %>>PB</option>
+                                                            <option value="PR" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "PR" ? "selected" : "" ) %>>PR</option>
+                                                            <option value="PE" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "PE" ? "selected" : "" ) %>>PE</option>
+                                                            <option value="PI" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "PI" ? "selected" : "" ) %>>PI</option>
+                                                            <option value="RJ" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "RJ" ? "selected" : "" ) %>>RJ</option>
+                                                            <option value="RN" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "RN" ? "selected" : "" ) %>>RN</option>
+                                                            <option value="RS" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "RS" ? "selected" : "" ) %>>RS</option>
+                                                            <option value="RO" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "RO" ? "selected" : "" ) %>>RO</option>
+                                                            <option value="SC" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "SC" ? "selected" : "" ) %>>SC</option>
+                                                            <option value="SP" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "SP" ? "selected" : "" ) %>>SP</option>
+                                                            <option value="SE" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "SE" ? "selected" : "" ) %>>SE</option>
+                                                            <option value="TO" <%= ( funcionarios.length == 1 && funcionarios[0].UF == "TO" ? "selected" : "" ) %>>TO</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Cidade</label>
+                                                        <input class="form-control" name="cidade" id="cidade" placeholder="Informe a cidade do funcionario" value="<%= ( funcionarios.length == 1 ? funcionarios[0].CIDADE : "" ) %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Bairro</label>
+                                                        <input class="form-control" name="bairro" id="bairro" placeholder="Informe o bairro do funcionario" value="<%= ( funcionarios.length == 1 ? funcionarios[0].BAIRRO : "" ) %>">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2">Salvar</button>
+                                        <button type="reset" class="btn btn-danger" onclick="window.location.href='/listarFuncionarios'">Cancelar</button>
+                                    </div>
+                                        <!-- Modal -->
+                                    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModal1Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModal1Label">Salvando os Dados</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                        Deseja realmente salvar o registro?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      <% include /templates/footer %>
+</body>
+
+</html>
